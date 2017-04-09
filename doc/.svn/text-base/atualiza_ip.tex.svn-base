@@ -1,0 +1,127 @@
+% atualiza_ip.tex --- documentação do programa atualiza_ip.
+
+% Copyright  (C)  2005  VEX http://www.vexbr.com.br
+
+% Version: 1.0
+% Keywords: 
+% Author: Marcelo Toledo <marcelo@vexbr.com.br>
+% Maintainer: Marcelo Toledo <marcelo@vexbr.com.br>
+
+% Commentary: 
+
+% Documentação do programa atualiza_ip.c.
+
+% Code:
+
+\documentclass[a4paper,12pt]{article}
+
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+\pdffalse
+\else
+\pdfoutput=1
+\pdftrue
+\fi
+
+\usepackage[latin1]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{times}
+\usepackage{indentfirst}
+\usepackage{url}
+
+\ifpdf
+\usepackage{ae}
+\else
+\usepackage[T1]{fontenc}
+\fi
+
+\newcommand{\email}{\begingroup \urlstyle{tt}\Url}
+
+\title{\Huge{Atualiza IP}}
+\author{Marcelo Toledo \\
+  \email{marcelo@vexbr.com.br} \\
+  VEX - \texttt{http://www.vexbr.com.br}
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\tableofcontents
+
+\section{Motivação}
+
+O número de hotspots da VEX estão crescendo consideravelmente a cada mês
+e assim torna-se desejável a automatização de qualquer serviço manual. A
+manutenção dos IPs dos gateways é um desses casos, toda vez que um
+hotspot é instalado um registro é criado com o IP do gateway, muitas
+vezes esse IP muda por razões diversas incluindo o fato do IP ser
+dinâmico.
+
+\section{Objetivo}
+
+Toda vez que o gateway mudar de IP o programa deve fazer uma atualização
+no banco de dados.
+
+\section{Considerações Técnicas}
+
+\subsection{Servidor Web}
+
+Muitas vezes o IP da máquina é interno, por isso ele seria inútil para
+nós, por esse motivo criamos um simples arquivo php no servidor web
+sauron que imprime o IP do cliente que conectou no webserver. O endereço
+dessa página é:
+
+\texttt{http://sauron.vexbr.com.br/meuip/index.php} \\
+
+Caso algum endereço/porta mude é necessário alterar os valores no código
+fonte.
+
+\subsection{Arquivo de Registro}
+
+Existe um arquivo de configuração que é criado no diretório HOME do
+usuário, por padrão \$HOME/.atualiza\_ip, ele é um reflexo perfeito do
+que existe no banco de dados, dessa maneira só criamos uma conexão com o
+banco de dados quando realmente necessário.
+
+\subsection{Banco de Dados}
+
+O programa acessa o banco de dados vex com um usuário especifico que tem
+permissão para atualizar somente aquela tabela.
+
+\begin{description}
+\item[Servidor] sauron
+\item[User] atualizaip
+\item[Pass] oAjXuK2Sip
+\item[Campo] ip\_dinamico\_gw
+\end{description}
+
+\subsection{Compilação}
+
+Este programa utiliza a biblioteca PQ, que serve para acessar o banco de
+dados PostgreSQL através de funções C. É necessário instalar os pacotes
+referentes, atualmente no debian os pacotes são:
+
+\begin{itemize}
+\item postgresql-dev
+\item libpq3
+\end{itemize}
+
+Após instalar as dependências basta digitar make e o programa será
+gerado.
+
+\subsection{Instalação}
+
+Deve-se colocar o programa para rodar no crontab com a freqüência
+desejada.
+
+% Referencias
+%\bibliography{biblio}
+%\bibliographystyle{plain}
+%\nocite{*}
+
+\end{document}
+
+% atualiza_ip.tex ends here.
